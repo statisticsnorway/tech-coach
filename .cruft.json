@@ -1,0 +1,16 @@
+{
+  "template": "https://github.com/statisticsnorway/ssb-project-template-stat",
+  "commit": "cb5e93fbcb298920b3d76770352d823840c49a38",
+  "checkout": "1.0.0",
+  "context": {
+    "cookiecutter": {
+      "full_name": "Arne Sørli",
+      "email": "81353974+arneso-ssb@users.noreply.github.com",
+      "project_name": "tech-coach",
+      "description": "Test project for tech-coaches in SSB.",
+      "license_year": "2022",
+      "_template": "https://github.com/statisticsnorway/ssb-project-template-stat"
+    }
+  },
+  "directory": null
+}
