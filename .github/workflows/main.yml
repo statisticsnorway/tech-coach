@@ -48,6 +48,13 @@ jobs:
           source_dir: "experimental"
           region: "europe-west1"
 
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+
       # Example of using the output
       - id: "test"
-        run: 'curl "${{ steps.deploy.outputs.url }}"'
+        # run: 'curl "${{ steps.deploy.outputs.url }}"'
+        run: "gcloud functions call helloWorld"
