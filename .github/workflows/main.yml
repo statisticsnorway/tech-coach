@@ -46,6 +46,7 @@ jobs:
           # Runtime to use for the function
           runtime: "nodejs16"
           source_dir: "experimental"
+          region: "europe-north1"
 
       # Example of using the output
       - id: "test"
