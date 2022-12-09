@@ -57,4 +57,4 @@ jobs:
       # Example of using the output
       - id: "test"
         # run: 'curl "${{ steps.deploy.outputs.url }}"'
-        run: "gcloud functions call helloWorld"
+        run: 'gcloud functions call helloWorld --region="europe-west1"'
