@@ -6,7 +6,7 @@
 # leses i notebookene og hvor data skal lagres i strukturen på
 # Google Cloud.
 
-# Definisjon av evt. generasjon:
+# Definisjon av generasjon. Periodebegrep for statistikk. Kan være eks. uke, måned, kvartal, termin, år :
 gen = "2021"
 
 # Eks. hvis man oppererer på ulike 'tverrsnitt', snapshot i forløpsdata:
@@ -22,7 +22,7 @@ versjon = "v1"
 # bør ikke endres:
 
 KILDE = "kilde1_data"
-STATISTIKK = "test_statistikk1"
+STATISTIKK = "ufo"
 
 # Faste mapper:
 KILDE_BUCKET = "gs://ssb-prod-tech-coach-data-kilde"  # kun siden vi ikke har noe automatisk innsamling som legger noe på INNDATA_PATH
@@ -36,11 +36,13 @@ INNDATA_PATH = f"{PROD_BUCKET}/{KILDE}/inndata/g{gen}"
 # INNDATA_PATH = f"{PROD_BUCKET}/{KILDE}/inndata/g{gen}/filnavn_p{gen}_{versjon}.parquet"
 
 KLARGJORT_PATH = f"{PROD_BUCKET}/{STATISTIKK}/klargjorte-data/g{gen}"
-TVERRSNITT_PATH = f"{PROD_BUCKET}/{STATISTIKK}/temp/tverrsnitt/g{gen}"
+TVERRSNITT_PATH = f"{PROD_BUCKET}/{STATISTIKK}/inndata/tverrsnitt/g{gen}"
 
 AVLEDNING_PATH = f"{PROD_BUCKET}/temp/avledning/"
+ESTIMERING_PATH = f"{PROD_BUCKET}/temp/estimering/"
 
-# Filsti til endelig statistikk
+# Filsti til statistikk
 STATISTIKK_PATH = f"{PROD_BUCKET}/{STATISTIKK}/statistikk/g{gen}"
 
-AVLEDNING_PATH = f"{PROD_BUCKET}/{STATISTIKK}/temp/avledning/g{gen}"
+# Filsti utdata
+UTDATA_PATH = f"{PROD_BUCKET}/{STATISTIKK}/utdata/g{gen}"
