@@ -34,3 +34,19 @@ poetry run pre-commit run --all-files
 Hvis noen av pre-commit sjekkene feiler, så prøv å kjøre pre-commit kommandoen på nytt.
 Den fikser som regel det meste, men må kjøres på nytt for å gå feilfritt gjennom med de
 korrigerte filene.
+
+### Jupyter Notebooks
+
+The files ending with `_ipynb.py` are jupyter notebooks
+stored as plain python files, using `jupytext`. To open them as Jupyter notebooks,
+right-click on them in JupyterLab and select Open With &rarr; Notebook.
+
+When testing locally, start JupyterLab with this command:
+
+```shell
+poetry run jupter lab
+```
+
+For VS Code there are extensions for opening a python script as Jupyter Notebook,
+for example:
+[Jupytext for Notebooks](https://marketplace.visualstudio.com/items?itemName=donjayamanne.vscode-jupytext).

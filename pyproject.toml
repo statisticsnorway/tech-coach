@@ -7,8 +7,11 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
-dapla-toolbelt = "^1.7.0"
-jupyterlab = "^4.0.1"
+dapla-toolbelt = ">=1.7.0"
+jupyterlab = ">=3.6.1"  # 3.6 is used on Dapla
+requests = ">=2.31.0"
+pandas = ">=2.0.2"
+jupytext = ">=1.14.6"
 
 [tool.poetry.dev-dependencies]
 black = {extras = ["d", "jupyter"], version = "^23.3.0"}
@@ -25,5 +28,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 profile = "black"
-skip_gitignore = true
 lines_after_imports = 2
+skip_gitignore = true
+# The line below is needed for jupyter notebooks stored as .py in percent format.
+# See https://github.com/PyCQA/isort/issues/1338 for details
+treat_comments_as_code = ["# %%"]
+
+[tool.jupytext]
+formats = "ipynb,auto:percent"
+notebook_metadata_filter = "jupytext.text_representation,-jupytext.text_representation.jupytext_version,-widgets,-varInspector,-kernelspec"
+cell_metadata_filter = "-all"
