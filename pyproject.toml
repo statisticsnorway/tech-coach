@@ -13,6 +13,7 @@ requests = ">=2.31.0"
 pandas = ">=2.0.2"
 jupytext = ">=1.14.6"
 python-dotenv = ">=1.0.0"
+openpyxl = ">=3.1.2"
 
 [tool.poetry.dev-dependencies]
 black = {extras = ["d", "jupyter"], version = "^23.3.0"}
