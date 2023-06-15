@@ -47,6 +47,16 @@ When testing locally, start JupyterLab with this command:
 poetry run jupter lab
 ```
 
+#### Converting files between .ipynb and .py
+
+```shell
+# convert notebook.ipynb to a .py file file in the double percent format
+poetry run jupytext --to py:percent notebook.ipynb
+
+# convert notebook.ipynb to a .py file in the double percent format
+poetry run jupytext --to notebook notebook.ipynb
+```
+
 For VS Code there are extensions for opening a python script as Jupyter Notebook,
 for example:
 [Jupytext for Notebooks](https://marketplace.visualstudio.com/items?itemName=donjayamanne.vscode-jupytext).

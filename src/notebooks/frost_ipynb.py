@@ -8,17 +8,29 @@
 # ---
 
 # %% [markdown]
-# # Read meteorological data from the frost API
+# # Les meteorologiske data fra frost api'et
 
 # %%
 import json
+import os
 
 import pandas as pd
 import requests
+from dotenv import load_dotenv
 
 
-# Insert your own client ID here
-client_id = "5dc47394-a994-4dc6-bbdd-088e323e71cc"
+# %%
+def frost_client_id() -> str:
+    """Get the frost_client_id secret.
+
+    Read the client id from environment variable or .env file.
+
+    Returns:
+        The frost_client_id secret
+    """
+    load_dotenv()
+    return os.getenv("FROST_CLIENT_ID")
+
 
 # %%
 # Define endpoint and parameters
@@ -29,7 +41,7 @@ parameters = {
     "referencetime": "2010-04-01/2010-04-03",
 }
 # Issue an HTTP GET request
-r = requests.get(endpoint, parameters, auth=(client_id, ""))
+r = requests.get(endpoint, parameters, auth=(frost_client_id(), ""))
 # Extract JSON data
 result = r.json()
 
@@ -44,7 +56,6 @@ else:
     print("Error! Returned status code %s" % r.status_code)
     print("Message: %s" % json["error"]["message"])
     print("Reason: %s" % json["error"]["reason"])
-
 
 # %%
 # This will return a Dataframe with all of the observations in a table format
