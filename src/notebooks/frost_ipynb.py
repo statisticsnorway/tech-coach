@@ -19,6 +19,16 @@ import requests
 from dotenv import load_dotenv
 
 
+# %% [markdown]
+# For å få tilgang til frost API'et trenger du en client id som du får ved
+# å registrere deg som bruker på https://frost.met.no/howto.html.
+# Client id'en du får må du legge i en `.env` fil i rot-katalogen på repoet,
+# og den skal i form se ut som dette:
+#
+# ```bash
+# FROST_CLIENT_ID="5dc4-mange-nummer-e71cc"
+# ```
+
 # %%
 def frost_client_id() -> str:
     """Get the frost_client_id secret.
@@ -54,8 +64,8 @@ if r.status_code == 200:
     print(json_str)
 else:
     print("Error! Returned status code %s" % r.status_code)
-    print("Message: %s" % json["error"]["message"])
-    print("Reason: %s" % json["error"]["reason"])
+    print("Message: %s" % result["error"]["message"])
+    print("Reason: %s" % result["error"]["reason"])
 
 # %%
 # This will return a Dataframe with all of the observations in a table format
