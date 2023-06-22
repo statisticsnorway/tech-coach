@@ -13,13 +13,15 @@
 # og lagrer den ned som parquet-fil i kildedatabøtta, samt som csv-fil i synk-ned bøtta og
 # som overføres til bakken.
 
+import os
+
 # +
 import dapla as dp
 import pandas as pd
 from dapla import AuthClient
-from google.cloud import bigquery
 from dotenv import load_dotenv
-import os
+from google.cloud import bigquery
+
 
 year = "2023"
 version = "1"
@@ -36,6 +38,7 @@ print(f"Transfer file: {transfer_path}")
 
 # -
 
+
 def get_bq_client(project: str) -> bigquery.Client:
     """
     Return a BigQuery client for a given project - initialized with a personal
@@ -48,6 +51,7 @@ def get_bq_client(project: str) -> bigquery.Client:
 # Client id'en du får må du legge i en .env fil i rot-katalogen på repoet, og den skal i form se ut som dette:
 #
 # GCP_PROJECT_ID_ID="staging-mange-nummer-71345"
+
 
 def gcp_id() -> str:
     """Get the GCP project ID.
@@ -65,9 +69,9 @@ bq_client = get_bq_client(gcp_id())
 print(bq_client)
 
 query = f"""
-    SELECT folkeregisteridentifikator, ajourholdstidspunkt, erGjeldende, kilde, 
-    aarsak, gyldighetstidspunkt, opphoerstidspunkt, adressegradering, 
-    vegadresse, adresseIdentifikatorFraMatrikkelen 
+    SELECT folkeregisteridentifikator, ajourholdstidspunkt, erGjeldende, kilde,
+    aarsak, gyldighetstidspunkt, opphoerstidspunkt, adressegradering,
+    vegadresse, adresseIdentifikatorFraMatrikkelen
     FROM `{gcp_id()}.inndata.v_postadresse` LIMIT 10
 """
 df = bq_client.query(query).to_dataframe()
@@ -75,7 +79,4 @@ df.head()
 
 dp.write_pandas(df=df, gcs_path=source_path)
 
-dp.write_pandas(df = df,
-                gcs_path = transfer_path,
-                file_format = "csv")
-
+dp.write_pandas(df=df, gcs_path=transfer_path, file_format="csv")
