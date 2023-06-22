@@ -14,9 +14,20 @@
 import json
 import os
 
+import dapla as dp
 import pandas as pd
 import requests
 from dotenv import load_dotenv
+
+
+year = "2010"
+version = "1"
+bucket = "gs://ssb-prod-tech-coach-data-kilde"
+folder = "tip-tutorials/frost_data"
+filename = f"frost_p{year}_v{version}.parquet"
+
+path = f"{bucket}/{folder}/{filename}"
+print(f"Storage file: {path}")
 
 
 # %% [markdown]
@@ -28,6 +39,7 @@ from dotenv import load_dotenv
 # ```bash
 # FROST_CLIENT_ID="5dc4-mange-nummer-e71cc"
 # ```
+
 
 # %%
 def frost_client_id() -> str:
@@ -48,7 +60,7 @@ endpoint = "https://frost.met.no/observations/v0.jsonld"
 parameters = {
     "sources": "SN18700,SN90450",
     "elements": "mean(air_temperature P1D),sum(precipitation_amount P1D),mean(wind_speed P1D)",
-    "referencetime": "2010-04-01/2010-04-03",
+    "referencetime": "2010-01-01/2010-12-31",
 }
 # Issue an HTTP GET request
 r = requests.get(endpoint, parameters, auth=(frost_client_id(), ""))
@@ -61,7 +73,7 @@ if r.status_code == 200:
     data = result["data"]
     print("Data retrieved from frost.met.no!")
     json_str = json.dumps(data, indent=2)  # Pretty print json
-    print(json_str)
+    # print(json_str)
 else:
     print("Error! Returned status code %s" % r.status_code)
     print("Message: %s" % result["error"]["message"])
@@ -73,6 +85,16 @@ df = pd.json_normalize(
     data, record_path=["observations"], meta=["sourceId", "referenceTime"]
 )
 df.head()
+
+# %%
+# Write to parquet file
+dp.write_pandas(df=df, gcs_path=path)
+
+# If you want to write to .parquet with plain Pandas, use the function below
+# df.to_parquet(path, storage_options=dp.pandas.get_storage_options())
+
+# %% [markdown]
+# ## Konvertering til inndata
 
 # %%
 # These columns will be kept
