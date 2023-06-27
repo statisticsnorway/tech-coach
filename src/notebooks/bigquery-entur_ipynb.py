@@ -13,14 +13,15 @@
 # og lagrer den ned som parquet-fil i kildedatabøtta, samt som csv-fil i synk-ned bøtta og
 # som overføres til bakken.
 
+# +
 import os
 
-# +
 import dapla as dp
 import pandas as pd
 from dapla import AuthClient
 from dotenv import load_dotenv
 from google.cloud import bigquery
+from google.oauth2 import service_account
 
 
 year = "2023"
@@ -36,7 +37,9 @@ print(f"Storage file: {source_path}")
 print(f"Transfer file: {transfer_path}")
 
 
-# -
+# +
+# Define the path to the service account key file
+key_path = "/home/jovyan/credentials/dev-tech-coach-6cc5-bq-entur-sa-f840b8741dd4.json"
 
 
 def get_bq_client(project: str) -> bigquery.Client:
@@ -44,8 +47,16 @@ def get_bq_client(project: str) -> bigquery.Client:
     Return a BigQuery client for a given project - initialized with a personal
     Google Identity token.
     """
-    credentials = AuthClient.fetch_google_credentials()
+    # credentials = AuthClient.fetch_google_credentials()
+    credentials = service_account.Credentials.from_service_account_file(
+        key_path,
+        scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
+
     return bigquery.Client(project=project, credentials=credentials)
+
+
+# -
 
 
 # Client id'en du får må du legge i en .env fil i rot-katalogen på repoet, og den skal i form se ut som dette:
@@ -68,14 +79,19 @@ def gcp_id() -> str:
 bq_client = get_bq_client(gcp_id())
 print(bq_client)
 
+# +
 query = f"""
     SELECT folkeregisteridentifikator, ajourholdstidspunkt, erGjeldende, kilde,
     aarsak, gyldighetstidspunkt, opphoerstidspunkt, adressegradering,
     vegadresse, adresseIdentifikatorFraMatrikkelen
     FROM `{gcp_id()}.inndata.v_postadresse` LIMIT 10
 """
-df = bq_client.query(query).to_dataframe()
-df.head()
+print(gcp_id())
+query_job = bq_client.query(query)
+
+# df = bq_client.query(query).to_dataframe()
+# df.head()
+# -
 
 dp.write_pandas(df=df, gcs_path=source_path)
 
