@@ -9,28 +9,6 @@
 
 # %% [markdown]
 # # Les meteorologiske data fra frost api'et
-
-# %%
-import json
-import os
-
-import dapla as dp
-import pandas as pd
-import requests
-from dotenv import load_dotenv
-
-
-year = "2010"
-version = "1"
-bucket = "gs://ssb-prod-tech-coach-data-kilde"
-folder = "tip-tutorials/frost_data"
-filename = f"frost_p{year}_v{version}.parquet"
-
-path = f"{bucket}/{folder}/{filename}"
-print(f"Storage file: {path}")
-
-
-# %% [markdown]
 # For å få tilgang til frost API'et trenger du en client id som du får ved
 # å registrere deg som bruker på https://frost.met.no/howto.html.
 # Client id'en du får må du legge i en `.env` fil i rot-katalogen på repoet,
@@ -39,6 +17,26 @@ print(f"Storage file: {path}")
 # ```bash
 # FROST_CLIENT_ID="5dc4-mange-nummer-e71cc"
 # ```
+
+# %%
+import json
+import os
+from datetime import datetime, timezone
+
+import dapla as dp
+import pandas as pd
+import requests
+from dotenv import load_dotenv
+
+
+from_date = "2010-01-01"
+to_date = "2010-12-31"
+version = "1"
+bucket = "gs://ssb-prod-tech-coach-data-kilde"
+folder = "tip-tutorials/frost_data"
+filename = f"frost_p{from_date}_{to_date}_v{version}.json"
+path = f"{bucket}/{folder}/{filename}"
+print(f"Storage file: {path}")
 
 
 # %%
@@ -55,12 +53,29 @@ def frost_client_id() -> str:
 
 
 # %%
+def inject_time_into_string(source: str, substring: str, time: datetime) -> str:
+    """Insert a timestamp into a string after given substring.
+
+    Args:
+        source: The source string which the timestamp should be inserted into.
+        substring: The timestamp is inserted after this substring
+        time: The time to insert
+
+    Returns:
+        The source string with the inserted timestamp
+    """
+    replace_pos = source.rindex(substring) + len(substring) - 1
+    iso_time = time.replace(microsecond=0).isoformat()
+    return source[:replace_pos] + f"_{iso_time}" + path[replace_pos:]
+
+
+# %%
 # Define endpoint and parameters
 endpoint = "https://frost.met.no/observations/v0.jsonld"
 parameters = {
     "sources": "SN18700,SN90450",
     "elements": "mean(air_temperature P1D),sum(precipitation_amount P1D),mean(wind_speed P1D)",
-    "referencetime": "2010-01-01/2010-12-31",
+    "referencetime": f"{from_date}/{to_date}",
 }
 # Issue an HTTP GET request
 r = requests.get(endpoint, parameters, auth=(frost_client_id(), ""))
@@ -72,12 +87,21 @@ result = r.json()
 if r.status_code == 200:
     data = result["data"]
     print("Data retrieved from frost.met.no!")
-    json_str = json.dumps(data, indent=2)  # Pretty print json
-    # print(json_str)
+
+    # Insert current time into filename
+    # TODO: Use UTC time
+    time_path = inject_time_into_string(path, "frost_", datetime.now())
+    print(f"Storage file: {time_path}")
+
+    with dp.FileClient.get_gcs_file_system().open(path, "w") as f:
+        json.dump(data, f)
+        # json_str = json.dumps(data, indent=2)  # Pretty print json
+        # print(json_str)
 else:
     print("Error! Returned status code %s" % r.status_code)
     print("Message: %s" % result["error"]["message"])
     print("Reason: %s" % result["error"]["reason"])
+    # TODO: Write to log file
 
 # %%
 # This will return a Dataframe with all of the observations in a table format
@@ -88,10 +112,12 @@ df.head()
 
 # %%
 # Write to parquet file
-dp.write_pandas(df=df, gcs_path=path)
+parquet_file = path.replace(".json", ".parquet")
+print(f"Write parquet file: {parquet_file}")
+dp.write_pandas(df=df, gcs_path=parquet_file)
 
 # If you want to write to .parquet with plain Pandas, use the function below
-# df.to_parquet(path, storage_options=dp.pandas.get_storage_options())
+# df.to_parquet(parquet_file, storage_options=dp.pandas.get_storage_options())
 
 # %% [markdown]
 # ## Konvertering til inndata
