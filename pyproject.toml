@@ -8,7 +8,6 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
 dapla-toolbelt = "^1.8.0"
-jupyterlab = "^4.0.1"
 google-cloud-bigquery = "^3.11.1"
 python-dotenv = "^1.0.0"
 pandas = {extras = ["excel", "gcp", "performance"], version = "^2.0.2"}
@@ -18,6 +17,7 @@ black = {extras = ["d", "jupyter"], version = "^23.3.0"}
 ipykernel = "^6.23.1"
 isort = "^5.12.0"
 jupyter = "^1.0.0"
+jupyterlab = "^4.0.1"
 nbstripout = "^0.6.1"
 pre-commit = "^3.3.2"
 pre-commit-hooks = "^4.4.0"
