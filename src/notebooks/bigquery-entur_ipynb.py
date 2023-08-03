@@ -100,9 +100,9 @@ df.info()
 # Create filename and path for sourcedata and transferdata.
 # last_date is the last recorded startTime in the retrieved dataset.
 last_date = df["startTime"].max().strftime("%Y-%m-%d")
-now = datetime.now().replace(microsecond=0).isoformat()
+now = datetime.now().replace(microsecond=0).isoformat().replace(":", "-")
 sourcedata_path = f"{sourcedata_bucket}/{sourcedata_folder}/{sourcedata_file_prefix}_p{from_date}_p{last_date}_{now}.parquet"
-transfer_path = f"{transfer_bucket}/{sourcedata_folder}/{sourcedata_file_prefix}_p{from_date}_p{last_date}_{now}.cvs"
+transfer_path = f"{transfer_bucket}/{sourcedata_folder}/{sourcedata_file_prefix}_p{from_date}_p{last_date}_{now}.csv"
 
 # %%
 # Write to parquet file in sourcedata bucket
