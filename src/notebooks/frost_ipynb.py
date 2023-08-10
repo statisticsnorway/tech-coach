@@ -28,13 +28,16 @@ import pandas as pd
 import requests
 from dotenv import load_dotenv
 
-
 from_date = "2010-01-01"
 to_date = "2010-12-31"
-version = "1"
+#version = "1"
+
+#inn i configfil
 bucket = "gs://ssb-prod-tech-coach-data-kilde"
 folder = "tip-tutorials/frost_data"
-filename = f"frost_p{from_date}_{to_date}_v{version}.json"
+
+now = datetime.now().replace(microsecond=0).isoformat().replace(":", "-")
+filename = f"frost_p{from_date}_{to_date}_{now}.json"
 path = f"{bucket}/{folder}/{filename}"
 print(f"Storage file: {path}")
 
@@ -50,23 +53,6 @@ def frost_client_id() -> str:
     """
     load_dotenv()
     return os.getenv("FROST_CLIENT_ID")
-
-
-# %%
-def inject_time_into_string(source: str, substring: str, time: datetime) -> str:
-    """Insert a timestamp into a string after given substring.
-
-    Args:
-        source: The source string which the timestamp should be inserted into.
-        substring: The timestamp is inserted after this substring
-        time: The time to insert
-
-    Returns:
-        The source string with the inserted timestamp
-    """
-    replace_pos = source.rindex(substring) + len(substring) - 1
-    iso_time = time.replace(microsecond=0).isoformat()
-    return source[:replace_pos] + f"_{iso_time}" + path[replace_pos:]
 
 
 # %%
@@ -90,8 +76,6 @@ if r.status_code == 200:
 
     # Insert current time into filename
     # TODO: Use UTC time
-    time_path = inject_time_into_string(path, "frost_", datetime.now())
-    print(f"Storage file: {time_path}")
 
     with dp.FileClient.get_gcs_file_system().open(path, "w") as f:
         json.dump(data, f)
