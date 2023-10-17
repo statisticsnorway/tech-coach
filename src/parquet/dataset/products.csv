@@ -1,0 +1,4 @@
+ProductID,ProductName,CategoryID,UnitPrice
+3001,Laptop,4001,800.00
+3002,Smartphone,4002,400.00
+3003,Headphones,4003,50.00
