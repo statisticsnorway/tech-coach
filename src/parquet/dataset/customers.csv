@@ -1,4 +1,4 @@
-CustomerID, FirstName, LastName, Email, RegistrationDate
-1001, Alice, Johnson, alice.j@example.com, 2022-01-15
-1002, Bob, Smith, bob.smith@example.com, 2022-02-20
-1003, Charlie, Brown, charlie.b@example.com, 2022-03-10
+CustomerID,FirstName,LastName,Email,RegistrationDate
+1001,Alice,Johnson,alice.j@example.com,2022-01-15
+1002,Bob,Smith,bob.smith@example.com,2022-02-20
+1003,Charlie,Brown,charlie.b@example.com,2022-03-10
