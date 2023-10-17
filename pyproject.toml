@@ -11,6 +11,7 @@ dapla-toolbelt = "^1.8.0"
 google-cloud-bigquery = "^3.11.1"
 python-dotenv = "^1.0.0"
 pandas = {extras = ["excel", "gcp", "performance"], version = "^2.0.2"}
+duckdb = "^0.9.1"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["d", "jupyter"], version = "^23.3.0"}
