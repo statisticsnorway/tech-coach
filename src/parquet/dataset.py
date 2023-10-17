@@ -26,7 +26,5 @@ def create_dataset() -> None:
     categories_df.to_parquet(data_dir / "categories.parquet")
 
 
-print("hello")
-
 if __name__ == "__main__":
     create_dataset()
