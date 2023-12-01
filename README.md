@@ -53,8 +53,8 @@ poetry run jupter lab
 # convert notebook.ipynb to a .py file file in the double percent format
 poetry run jupytext --to py:percent notebook.ipynb
 
-# convert notebook.ipynb to a .py file in the double percent format
-poetry run jupytext --to notebook notebook.ipynb
+# convert notebook.py to a Jupyter notebook .ipynb file
+poetry run jupytext --to notebook notebook.py
 ```
 
 For VS Code there are extensions for opening a python script as Jupyter Notebook,

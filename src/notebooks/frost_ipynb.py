@@ -28,11 +28,12 @@ import pandas as pd
 import requests
 from dotenv import load_dotenv
 
+
 from_date = "2010-01-01"
 to_date = "2010-12-31"
-#version = "1"
+# version = "1"
 
-#inn i configfil
+# inn i configfil
 bucket = "gs://ssb-prod-tech-coach-data-kilde"
 folder = "tip-tutorials/frost_data"
 

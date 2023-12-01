@@ -1,0 +1,4 @@
+DetailID,OrderID,ProductID,Quantity
+4001,2001,3001,1
+4002,2001,3002,2
+4003,2002,3003,3
