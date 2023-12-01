@@ -7,22 +7,24 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
-dapla-toolbelt = "^1.8.0"
-google-cloud-bigquery = "^3.11.1"
-python-dotenv = "^1.0.0"
-pandas = {extras = ["excel", "gcp", "performance"], version = "^2.0.2"}
-duckdb = "^0.9.1"
+dapla-toolbelt = ">=1.8.0"
+duckdb = ">=0.9.1"
+google-cloud-bigquery = ">=3.11.1"
+jupytext = ">=1.14.6"
+pandas = {extras = ["excel", "gcp", "performance"], version = ">=2.0.2"}
+python-dotenv = ">=1.0.0"
+requests = ">=2.31.0"
 
 [tool.poetry.group.dev.dependencies]
-black = {extras = ["d", "jupyter"], version = "^23.3.0"}
-ipykernel = "^6.23.1"
-isort = "^5.12.0"
-jupyter = "^1.0.0"
-jupyterlab = "^4.0.1"
-nbstripout = "^0.6.1"
-pre-commit = "^3.3.2"
-pre-commit-hooks = "^4.4.0"
-pytest = "^7.3.1"
+black = {extras = ["d", "jupyter"], version = ">=23.3.0"}
+ipykernel = ">=6.23.1"
+isort = ">=5.12.0"
+jupyter = ">=1.0.0"
+jupyterlab = ">=4.0.1"
+nbstripout = ">=0.6.1"
+pre-commit = ">=3.3.2"
+pre-commit-hooks = ">=4.4.0"
+pytest = ">=7.3.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
