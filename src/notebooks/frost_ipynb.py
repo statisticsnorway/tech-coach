@@ -35,6 +35,7 @@ to_date = "2010-12-31"
 
 # inn i configfil
 bucket = "gs://ssb-tech-coach-data-kilde-prod"
+bucket = "gs://ssb-tech-coach-data-kilde-test"
 folder = "tip-tutorials/frost_data"
 
 now = datetime.now().replace(microsecond=0).isoformat().replace(":", "-")
@@ -99,7 +100,7 @@ df.head()
 # Write to parquet file
 parquet_file = path.replace(".json", ".parquet")
 print(f"Write parquet file: {parquet_file}")
-# dp.write_pandas(df=df, gcs_path=parquet_file)
+dp.write_pandas(df=df, gcs_path=parquet_file)
 
 # If you want to write to .parquet with plain Pandas, use the function below
 # df.to_parquet(parquet_file, storage_options=dp.pandas.get_storage_options())
@@ -114,3 +115,5 @@ df2 = df[columns].copy()
 # Convert the time value to something Python understands
 df2["referenceTime"] = pd.to_datetime(df2["referenceTime"])
 df2.head()
+
+# %%
