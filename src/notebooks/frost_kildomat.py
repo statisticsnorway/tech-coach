@@ -28,9 +28,11 @@ target_bucket = "gs://ssb-tech-coach-data-produkt-test"
 folder = "tip-tutorials/frost_data"
 filename = "frost_p2010-01-01_2010-12-31_2023-12-20T10-58-19.json"
 source_path = f"{source_bucket}/{folder}/{filename}"
+source_filename = source_path.split("/")[-1].replace("json", "parquet")
 target_path = f"{target_bucket}/{folder}/{filename.replace('json', 'parquet')}"
 print(f"Source file: {source_path}")
 print(f"Target file: {target_path}")
+print(f"Source filename: {source_filename}")
 
 # %%
 # Read json file
