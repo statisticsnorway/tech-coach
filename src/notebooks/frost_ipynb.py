@@ -17,6 +17,8 @@
 # ```bash
 # FROST_CLIENT_ID="5dc4-mange-nummer-e71cc"
 # ```
+#
+# Bytt mellom prod og test ved å sette `bucket = prod_bucket` eller `bucket = test_bucket` i koden nedenfor.
 
 # %%
 import json
@@ -29,12 +31,14 @@ import requests
 from dotenv import load_dotenv
 
 
-from_date = "2010-01-01"
-to_date = "2010-12-31"
+from_date = "2011-01-01"
+to_date = "2011-12-31"
 # version = "1"
 
 # inn i configfil
-bucket = "gs://ssb-prod-tech-coach-data-kilde"
+prod_bucket = "gs://ssb-tech-coach-data-kilde-prod"
+test_bucket = "gs://ssb-tech-coach-data-kilde-test"
+bucket = prod_bucket
 folder = "tip-tutorials/frost_data"
 
 now = datetime.now().replace(microsecond=0).isoformat().replace(":", "-")
@@ -97,9 +101,9 @@ df.head()
 
 # %%
 # Write to parquet file
-parquet_file = path.replace(".json", ".parquet")
-print(f"Write parquet file: {parquet_file}")
-dp.write_pandas(df=df, gcs_path=parquet_file)
+# parquet_file = path.replace(".json", ".parquet")
+# print(f"Write parquet file: {parquet_file}")
+# dp.write_pandas(df=df, gcs_path=parquet_file)
 
 # If you want to write to .parquet with plain Pandas, use the function below
 # df.to_parquet(parquet_file, storage_options=dp.pandas.get_storage_options())
@@ -109,8 +113,8 @@ dp.write_pandas(df=df, gcs_path=parquet_file)
 
 # %%
 # These columns will be kept
-columns = ["sourceId", "referenceTime", "elementId", "value", "unit", "timeOffset"]
-df2 = df[columns].copy()
+# columns = ["sourceId", "referenceTime", "elementId", "value", "unit", "timeOffset"]
+# df2 = df[columns].copy()
 # Convert the time value to something Python understands
-df2["referenceTime"] = pd.to_datetime(df2["referenceTime"])
-df2.head()
+# df2["referenceTime"] = pd.to_datetime(df2["referenceTime"])
+# df2.head()
