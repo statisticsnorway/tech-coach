@@ -18,7 +18,7 @@
 # FROST_CLIENT_ID="5dc4-mange-nummer-e71cc"
 # ```
 #
-# Bytt mellom prod og test ved å sette `bucket = prod_bucket` eller `bucket = test_bucket` i koden ne
+# Bytt mellom prod og test ved å sette `bucket = prod_bucket` eller `bucket = test_bucket` i koden nedenfor.
 
 # %%
 import json

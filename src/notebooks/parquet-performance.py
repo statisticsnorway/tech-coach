@@ -7,6 +7,16 @@
 #       format_version: '1.3'
 # ---
 
+# %% [markdown]
+# # Testing a ytelse med parquet-filer
+# Denne koden tester leseytelse ved lesing av parquet-filer, både fra lokalt filsystem og fra bøtter på Dapla.
+#
+# Datasettene som er brukt er åpne og hentet fra Kaggle.
+# BooksDataset: https://www.kaggle.com/datasets/elvinrustam/books-dataset (103 063 rader og 15 kolonner).
+#
+# For filtest er de lagret i repoet som CSV-fil, og for Dapla-test er de lagret i bøtten:
+# `gs://ssb-tech-coach-data-produkt-test/temp/parquet-test2/BooksDatasetClean.parquet`
+
 # %%
 import contextlib
 import time
@@ -88,5 +98,3 @@ with time_block("Partitioned, bucket"):
 
 # %%
 df.info()
-
-# %%
