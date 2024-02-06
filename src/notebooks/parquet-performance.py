@@ -90,9 +90,7 @@ with time_block("Reading partitioned from file"):
 # %%
 # Read unpartitioned from bucket
 with time_block("Reading unpartitioned from bucket"):
-    df_upb = dp.read_pandas(
-        f"{bucket_with_dir}/unpartitioned/{filename}"
-    )
+    df_upb = dp.read_pandas(f"{bucket_with_dir}/unpartitioned/{filename}")
     # df_upb = pd.read_parquet("gs://ssb-tech-coach-data-produkt-test/temp/parquet-test2/BooksDatasetClean.parquet", storage_options=dp.pandas.get_storage_options())
 
 
@@ -103,4 +101,3 @@ with time_block("Reading partitioned from bucket"):
         f"{bucket_with_dir}/partitioned",
         storage_options=dp.pandas.get_storage_options(),
     )
-
