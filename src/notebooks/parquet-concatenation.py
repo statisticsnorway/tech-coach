@@ -16,6 +16,15 @@ import time
 
 import dapla as dp
 import pandas as pd
+from faker import Faker
+
+
+# %%
+number_of_files = 11
+bucket = "gs://ssb-prod-dapla-felles-data-delt"
+dir = f"/tech-coach/parquet-test/concat/dataset-{number_of_files}/"
+bucket_with_dir = bucket + dir
+print(bucket_with_dir)
 
 
 # %%
@@ -30,5 +39,34 @@ def time_block(label):
 
 
 # %%
-def create_transaction_df(id: int) -> pd.DataFrame:
-    pass
+# Create in instance of Faker
+fake = Faker("no_NO")
+
+
+# %%
+def create_transaction(tr_id: int) -> pd.DataFrame:
+    data = {
+        "transaction_id": tr_id,
+        "name": fake.name(),
+        "street_address": fake.street_address(),
+        "city": fake.city(),
+        "email": fake.email(),
+        "job": fake.job(),
+    }
+    return pd.DataFrame(data, index=[0])
+
+
+# %%
+df = create_transaction(1)
+df.head()
+
+# %% [markdown]
+# # Skriv transaksjonsfiler
+# %%
+num_digits = len(str(number_of_files))
+with time_block(f"Writing {number_of_files} transaction files"):
+    for i in range(number_of_files):
+        filename = f"{i:0{num_digits}}.parquet"  # pad the number with leading zeros
+        df = create_transaction(i)
+        dp.write_pandas(df, f"{bucket_with_dir}{filename}")
+# %%
