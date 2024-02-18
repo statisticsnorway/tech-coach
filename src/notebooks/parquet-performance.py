@@ -91,13 +91,12 @@ with time_block("Reading unpartitioned from file"):
 
 # %%
 with time_block("Reading partitioned from file"):
-    df_p = pd.read_parquet(dataset_dir / "parquet_partition", engine="pyarrow")
+    df_p = pd.read_parquet(dataset_dir / "partitioned", engine="pyarrow")
 
 # %%
 # Read unpartitioned from bucket
 with time_block("Reading unpartitioned from bucket"):
     df_upb = dp.read_pandas(f"{bucket_with_dir}/unpartitioned/{filename}")
-    # df_upb = pd.read_parquet("gs://ssb-tech-coach-data-produkt-test/temp/parquet-test2/BooksDatasetClean.parquet", storage_options=dp.pandas.get_storage_options())
 
 
 # %%
