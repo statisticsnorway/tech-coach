@@ -39,6 +39,7 @@ from faker import Faker
 
 # %%
 number_of_files = 11
+write_files = True
 bucket = "gs://ssb-prod-dapla-felles-data-delt"
 dir = f"/tech-coach/parquet-test/concat/dataset-{number_of_files}/"
 bucket_with_dir = bucket + dir
@@ -81,14 +82,38 @@ def create_transaction(tr_id: int) -> pd.DataFrame:
 df = create_transaction(1)
 df.head()
 
+
 # %% [markdown]
-# # Skriv transaksjonsfiler
+# ## Skriv transaksjonsfiler
 # %%
-num_digits = len(str(number_of_files))
-with time_block(f"Writing {number_of_files} transaction files"):
-    for i in range(number_of_files):
-        filename = f"{i:0{num_digits}}.parquet"  # pad the number with leading zeros
-        df = create_transaction(i)
-        dp.write_pandas(df, f"{bucket_with_dir}{filename}")
+if write_files:
+    num_digits = len(str(number_of_files))
+    with time_block(f"Writing {number_of_files} transaction files"):
+        for i in range(number_of_files):
+            filename = f"{i:0{num_digits}}.parquet"  # pad the number with leading zeros
+            df = create_transaction(i)
+            dp.write_pandas(df, f"{bucket_with_dir}{filename}")
+
+# %% [markdown]
+# ## Les transaksjonsfiler og slå sammen
 
 # %%
+# Get list of parquet files
+fs = dp.FileClient.get_gcs_file_system()
+parquet_files = []
+for root, dirs, files in fs.walk(bucket_with_dir):
+    for file in files:
+        parquet_files.append(f"{root}{file}")
+
+# %%
+# Read transcation files
+transactions_df_list = []
+with time_block(f"Reading {number_of_files} transaction files"):
+    for file in parquet_files:
+        transactions_df_list.append(dp.read_pandas(file))
+
+# %%
+# Concatenate transaction dataframes to one dataframe and write to concatenated file
+with time_block("Concatenate transaction dataframes and store to one file"):
+    df_all = pd.concat(transactions_df_list)
+    dp.write_pandas(df_all, concat_file)
