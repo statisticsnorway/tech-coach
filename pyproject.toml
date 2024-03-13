@@ -15,6 +15,7 @@ pandas = {extras = ["excel", "gcp", "performance"], version = ">=2.0.2"}
 python-dotenv = ">=1.0.0"
 requests = ">=2.31.0"
 faker = ">=23.2.1"
+google-cloud-secret-manager = ">=2.18.3"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["d", "jupyter"], version = ">=23.3.0"}
