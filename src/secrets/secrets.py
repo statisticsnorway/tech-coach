@@ -17,11 +17,23 @@
 # %%
 import os
 
+import dapla as dp
 from dapla import AuthClient
 from dotenv import load_dotenv
 from google.cloud import secretmanager
 from google.cloud.secretmanager_v1.types import Replication, Secret
 
+
+# %%
+def download_env_file_from_bucket(gcs_path):
+    """Download .env-file from bucket to root directory in repo"""
+    dest_path = dp.repo_root_dir() / ".env"
+    with dp.FileClient.gcs_open(gcs_path, "rb") as src, open(dest_path, "wb") as dst:
+        dst.write(src.read())
+
+
+# %%
+download_env_file_from_bucket("gs://ssb-tech-coach-data-produkt-prod/temp/.env")
 
 # %%
 load_dotenv()  # Laster inn .env fil og setter miljøvariable
@@ -48,11 +60,7 @@ parent = f"projects/{project}"
 
 replication_policy = Replication(
     user_managed=Replication.UserManaged(
-        replicas=[
-            Replication.UserManaged.Replica(
-                location="europe-north1"
-            )
-        ]
+        replicas=[Replication.UserManaged.Replica(location="europe-north1")]
     )
 )
 
