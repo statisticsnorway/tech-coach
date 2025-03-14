@@ -34,18 +34,24 @@ import time
 
 import dapla as dp
 import pandas as pd
+import pyarrow.dataset as ds
+import pyarrow.fs
+import pyarrow.parquet as pq
 from faker import Faker
 
 
 # %%
-number_of_files = 11
-write_files = True
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
-dir = f"/tech-coach/parquet-test/concat/dataset-{number_of_files}/"
+number_of_files = 11  # datasets for 11 and 5000 has been pre-generated
+write_files = False
+bucket = "gs://ssb-tech-coach-data-produkt-prod"
+dir = f"/temp/parquet-test/concat/dataset-{number_of_files}/"
 bucket_with_dir = bucket + dir
 print(bucket_with_dir)
 concat_file = (
-    bucket + f"/tech-coach/parquet-test/concat/dataset-{number_of_files}-concat.parquet"
+    bucket + f"/temp/parquet-test/concat/dataset-{number_of_files}-concat.parquet"
+)
+concat_arrow_file = (
+    bucket + f"/temp/parquet-test/concat/dataset-{number_of_files}-concat-arrow.parquet"
 )
 
 
@@ -103,17 +109,27 @@ fs = dp.FileClient.get_gcs_file_system()
 parquet_files = []
 for root, dirs, files in fs.walk(bucket_with_dir):
     for file in files:
-        parquet_files.append(f"{root}{file}")
+        if file.endswith(".parquet"):
+            parquet_files.append(f"{root}{file}")
 
 # %%
 # Read transcation files
 transactions_df_list = []
-with time_block(f"Reading {number_of_files} transaction files"):
+with time_block(f"Reading and concatenating {number_of_files} transaction files"):
     for file in parquet_files:
         transactions_df_list.append(dp.read_pandas(file))
-
-# %%
-# Concatenate transaction dataframes to one dataframe and write to concatenated file
-with time_block("Concatenate transaction dataframes and store to one file"):
     df_all = pd.concat(transactions_df_list)
     dp.write_pandas(df_all, concat_file)
+
+
+# %%
+# Read and concatenate using pyarrow
+with time_block("Reading and concatenating using pyarrow dataset"):
+    gcs = pyarrow.fs.GcsFileSystem()
+
+    # Build a dataset from the GCS bucket path
+    dataset = ds.dataset(
+        bucket_with_dir.removeprefix("gs://"), format="parquet", filesystem=gcs
+    )
+    table = dataset.to_table()
+    pq.write_table(table, concat_arrow_file.removeprefix("gs://"), filesystem=gcs)
