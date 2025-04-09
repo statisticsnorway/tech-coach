@@ -5,6 +5,10 @@ description = "Test project for tech-coaches in SSB."
 authors = ["Arne Sørli <81353974+arneso-ssb@users.noreply.github.com>"]
 license = "MIT"
 
+packages = [
+    { include = "functions", from = "src" },
+]
+
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
 dapla-toolbelt = ">=1.8.0"
@@ -16,6 +20,7 @@ python-dotenv = ">=1.0.0"
 requests = ">=2.31.0"
 faker = ">=23.2.1"
 google-cloud-secret-manager = ">=2.18.3"
+dapla-toolbelt-pseudo = "^2.2.9"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["d", "jupyter"], version = ">=23.3.0"}
