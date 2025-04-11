@@ -62,20 +62,22 @@ def do_depseudo(df, encryption_type=None):
 df = read_data()
 
 pseudo_df = do_pseudo(df)
-pseudo_df_papis = do_pseudo(df, "papis")
-
 depseudo_df = do_depseudo(pseudo_df)
-depseudo_df_papis = do_depseudo(pseudo_df, "papis")
 
+pseudo_df_papis = do_pseudo(df, "papis")
+depseudo_df_papis = do_depseudo(pseudo_df_papis, "papis")
+
+print("\nOriginal DataFrame:")
 print(df.head())
-print('/n')
 
+print("\nPseudonymized (default encryption):")
 print(pseudo_df.head())
-print('/n')
-print(pseudo_df_papis.head())
-print('/n')
 
+print("\nDepseudonymized (from default encryption):")
 print(depseudo_df.head())
-print('/n')
+
+print("\nPseudonymized (PAPIS-compatible encryption):")
+print(pseudo_df_papis.head())
+
+print("\nDepseudonymized (from PAPIS-compatible encryption):")
 print(depseudo_df_papis.head())
-print('/n')
